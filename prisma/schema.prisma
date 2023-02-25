@@ -9,3 +9,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+ 
+model User{
+  id Int @id  @default(autoincrement())
+  createdAt DateTime @default(now())
+  isAdmin Boolean
+  username String @unique
+  pwd String 
+}
+
+model Complaint{
+  id Int @id  @default(autoincrement())
+  createdAt DateTime @default(now())
+  complaint String
+  status String
+  userId String 
+}
