@@ -13,8 +13,9 @@ datasource db {
 model User{
   id Int @id  @default(autoincrement())
   createdAt DateTime @default(now())
-  isAdmin Boolean
   username String @unique
+  email String @unique
+  isAdmin Boolean
   pwd String 
 }
 
