@@ -20,7 +20,7 @@ model User{
 
   Complaints Complaint[] 
 
-  @@map("users")
+  @@map("users")  // maps the User model to a database table called "users"
 }
 
 model Complaint{
@@ -31,5 +31,5 @@ model Complaint{
 
   userId Int 
   user User @relation(fields: [userId], references: [id])
-  @@map("complaints")
+  @@map("complaints") 
 }
