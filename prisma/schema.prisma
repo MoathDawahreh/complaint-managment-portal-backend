@@ -17,6 +17,10 @@ model User{
   email String @unique
   isAdmin Boolean
   pwd String 
+
+  Complaints Complaint[] 
+
+  @@map("users")
 }
 
 model Complaint{
@@ -24,5 +28,8 @@ model Complaint{
   createdAt DateTime @default(now())
   complaint String
   status String
-  userId String 
+
+  userId Int 
+  user User @relation(fields: [userId], references: [id])
+  @@map("complaints")
 }
