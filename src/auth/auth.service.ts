@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
@@ -29,6 +30,9 @@ export class AuthService {
       delete user.pwd;
       return user;
     } catch (error) {
+      if( error.message.includes('invalid value') )
+      throw new BadRequestException({ message: 'Invalid type value!' })
+      
       if (
         error instanceof
         PrismaClientKnownRequestError
