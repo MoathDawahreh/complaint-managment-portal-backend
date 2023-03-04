@@ -9,9 +9,9 @@ import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-@Injectable()
+@Injectable() // we should annotate the class with Injectable if we want to allow injections in the class constructor
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {} // inject prisma in the AuthService class
 
   async signup(dto: AuthDto) {
     try {
