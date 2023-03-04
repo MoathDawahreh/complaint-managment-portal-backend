@@ -18,7 +18,7 @@ model User{
   isAdmin Boolean
   pwd String 
 
-  Complaints Complaint[] 
+  Complaints Complaint[] // releation each user has many complains
 
   @@map("users")  // maps the User model to a database table called "users"
 }
@@ -30,6 +30,6 @@ model Complaint{
   status String
 
   userId Int 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id]) // releation each user has many complains
   @@map("complaints") 
 }
