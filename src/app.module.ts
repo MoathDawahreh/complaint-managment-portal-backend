@@ -5,6 +5,6 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule.forRoot({}), AuthModule, UserModule, PrismaModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, UserModule, PrismaModule], // isGlobal works as the decorator global it makes prisma service accecable in the whole app
 })
 export class AppModule {}
