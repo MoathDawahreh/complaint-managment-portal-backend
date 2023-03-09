@@ -35,8 +35,7 @@ export class AuthService {
       });
 
       // delete user.pwd;
-        this.signToken(user.id, user.username);
-
+      return this.signToken(user.id, user.username);
     } catch (error) {
       if (error.message.includes('invalid value'))
         throw new BadRequestException({ message: 'Invalid type value!' });
@@ -63,18 +62,20 @@ export class AuthService {
 
     if (!pwMatches) throw new ForbiddenException('invalid password!');
 
-    this.signToken(user.id, user.username);
+    return this.signToken(user.id, user.username);
   }
 
-  signToken(userId: number, username: string): Promise<string> {
+  async signToken(userId: number, username: string): Promise<{ access_token: string }> {
     const payload = {
       sub: userId,
       username,
     };
 
-    return this.jwt.signAsync(payload, {
-      expiresIn: '15min',
-      secret: this.config.get('JWT_SECRET'),
-    });
+    return {
+      access_token: await this.jwt.signAsync(payload, {
+        expiresIn: '15min',
+        secret: this.config.get('JWT_SECRET'),
+      }),
+    };
   }
 }
