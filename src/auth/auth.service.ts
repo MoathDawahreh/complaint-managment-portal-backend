@@ -8,11 +8,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable() // we should annotate the class with Injectable if we want to allow injections in the class constructor
 export class AuthService {
-  constructor(private prisma: PrismaService) {} // inject prisma in the AuthService class
-
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private config: ConfigService,
+  ) {} // inject prisma in the AuthService class
+  // JwtService is imported in the auth module from @nestjs/jwt
   async signup(dto: AuthDto) {
     try {
       // generate the password hash
@@ -28,8 +34,9 @@ export class AuthService {
         },
       });
 
-      delete user.pwd;
-      return user;
+      // delete user.pwd;
+        this.signToken(user.id, user.username);
+
     } catch (error) {
       if (error.message.includes('invalid value'))
         throw new BadRequestException({ message: 'Invalid type value!' });
@@ -56,7 +63,18 @@ export class AuthService {
 
     if (!pwMatches) throw new ForbiddenException('invalid password!');
 
-    delete user.pwd;
-    return user;
+    this.signToken(user.id, user.username);
+  }
+
+  signToken(userId: number, username: string): Promise<string> {
+    const payload = {
+      sub: userId,
+      username,
+    };
+
+    return this.jwt.signAsync(payload, {
+      expiresIn: '15min',
+      secret: this.config.get('JWT_SECRET'),
+    });
   }
 }
