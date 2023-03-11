@@ -5,11 +5,11 @@ import { Request } from 'express';
 @Controller('users')
 export class UserController {
   constructor() {}
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt')) // in auth/strategy where we difined the strategy type: PassportStrategy(Strategy, 'jwt')
   @Get(':id')
   getUser(@Req() req: Request) {
-    console.log(req.user);
-    return 'ya hla ystaaaa';
+    console.log(req.params);
+    return req.user;
   }
   @Get()
   getUsers() {

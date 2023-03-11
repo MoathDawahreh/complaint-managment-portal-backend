@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategy';
 
 @Module({
-  imports: [JwtModule.register({})], // to sign and decode tokens
+  imports: [JwtModule.register({})], // to sign and verify tokens
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
 })
