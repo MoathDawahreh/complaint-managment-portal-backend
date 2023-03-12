@@ -13,7 +13,7 @@ export class UserService {
       },
     });
 
-    if (!user) return null;
+    if (!user) return 'Not Found!';
 
     delete user.pwd;
     return user;
