@@ -26,7 +26,7 @@ In summary, @Param('id', ParseIntPipe) tells NestJS to extract the id parameter 
 
   @Get('')
   getUsers() {
-    return 'all users yastaa';
+    return 'all users';
   } // paginated ....
 
   /*
@@ -34,6 +34,7 @@ In summary, @Param('id', ParseIntPipe) tells NestJS to extract the id parameter 
 */
   @Get('me')
   getMe(@getUser() user: User) {
-    return 'all users yastaa';
+    console.log(user);
+    return 'test';
   }
 }

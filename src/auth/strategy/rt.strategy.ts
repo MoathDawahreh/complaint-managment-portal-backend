@@ -1,27 +1,29 @@
+// refresh token strategy
+
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Request } from 'express';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  // inject prisma service to acess the database and return the needed data when the user is authorized
+export class RTStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor(private config: ConfigService, private prisma: PrismaService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get('JWT_SECRET'),
+      secretOrKey: config.get('RT_SECRET'),
     });
   }
 
-  async validate(payload: { sub: number; username: string }) {
+  async validate(req: Request, payload: { sub: number; username: string }) {
     const user = this.prisma.user.findUnique({
       where: {
         id: payload.sub,
       },
     });
-    return user;
-    // on "return user" here nest js will return req.user = user
+    const refreshToken = req.get('authorization').replace('Bearer', '').trim();
+    return { ...user, refreshToken };
   }
 }

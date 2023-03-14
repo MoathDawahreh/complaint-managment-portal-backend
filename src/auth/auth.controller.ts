@@ -16,6 +16,16 @@ export class AuthController {
   siginin(@Body() dto: AuthDto) {
     return this.authService.login(dto);
   }
+
+  @Post('logout')
+  logout() {
+    return this.authService.logout;
+  }
+
+  @Post('refresh')
+  refreshTokens() {
+    return this.authService.refreshTokens;
+  }
 }
 
 // According to RESTful API conventions, GET requests are used for retrieving resources, while POST requests are used for creating resources
